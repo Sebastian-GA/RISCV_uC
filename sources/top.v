@@ -10,10 +10,10 @@ module top(
 
     // Peripherals
     input [4:0] btn,
-    input [4:0] sw,
+    input [15:0] sw,
     // input [4:0] ipins,
 
-    output [4:0] led,
+    output [15:0] led,
     output [6:0] HEX,
     output [3:0] HEX_Selector
 );

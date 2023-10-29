@@ -16,9 +16,9 @@ module peripherals
 
     // Peripherals
     input [4:0] btn,
-    input [4:0] sw,
+    input [15:0] sw,
 
-    output [4:0] led,
+    output [15:0] led,
     output [6:0] HEX,
     output [3:0] HEX_Selector
 );
@@ -44,7 +44,7 @@ module peripherals
     wire [31:0] RD_dout;
     digital_out digital_out(
         .clk(clk),
-        .WD(WD[4:0]),
+        .WD(WD[15:0]),
         .WE(WE_dout),
         .led(led),
         .RD(RD_dout)

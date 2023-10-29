@@ -8,16 +8,16 @@
 module digital_in(
     input clk,
     input [4:0] btn,
-    input [4:0] sw,
+    input [15:0] sw,
     // input [4:0] ipins,
     
     output [31:0] RD
 );
     // Peripherals registers
-    reg [9:0] inputs = 0;
+    reg [20:0] inputs = 0;
     assign RD = inputs;
 
     always @ (posedge clk)
-        inputs <= {sw, btn};
+        inputs <= {btn, sw};
 
 endmodule

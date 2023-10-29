@@ -7,19 +7,19 @@
 
 module digital_out(
     input clk,
-    input [4:0] WD,
+    input [15:0] WD,
     input WE,
     
-    output [4:0] led,
+    output [15:0] led,
     output [31:0] RD
 );
 
     // Peripheral registers
-    reg [4:0] outputs = 0;
+    reg [15:0] outputs = 0;
     assign RD = outputs;
     
     // Assign led
-    assign led = outputs[4:0];
+    assign led = outputs[15:0];
 
     always @ (posedge clk)
         outputs <= WE ? WD : outputs;
