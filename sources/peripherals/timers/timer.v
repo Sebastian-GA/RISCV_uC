@@ -20,10 +20,10 @@ module timer #(parameter F_DIV = 50_000)(
     // Frequency divider
     reg [31:0] f_div_counter = 0;
     wire f_div_enable;
-    assign f_div_enable = (f_div_counter == F_DIV) || WE ? 1 : 0;
+    assign f_div_enable = (f_div_counter == F_DIV) ? 1 : 0;
 
     always @ (posedge clk) begin
-        f_div_counter <= (f_div_enable | WE) ? 0 : f_div_counter + 1;
+        f_div_counter <= (f_div_enable) ? 0 : f_div_counter + 1;
 
         timer <= WE ? WD[31:0] : (f_div_enable ? timer + 1 : timer);
     end
