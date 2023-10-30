@@ -11,9 +11,11 @@ module display_7seg(
     input [3:0] num2,
     input [3:0] num3,
     input [3:0] nums_enable,
+    input [3:0] dots_enable,
 
-    output [6:0] display,
-    output reg [3:0] selector
+    output [6:0] hex,
+    output reg hex_dot,
+    output reg [3:0] hex_sel
 );
     
     // Frequency divider
@@ -46,16 +48,28 @@ module display_7seg(
     
     bin_to_7seg converter(
         .num(num_out),
-        .display(display)
+        .hex(hex)
     );
     
     // Selector
     always @(*)
         case (num_selected)
-            2'b00: selector = {3'b111, ~nums_enable[0]};
-            2'b01: selector = {2'b11, ~nums_enable[1], 1'b1};
-            2'b10: selector = {1'b1, ~nums_enable[2], 2'b11};
-            2'b11: selector = {~nums_enable[3], 3'b111};
+            2'b00: begin
+                hex_sel = {3'b111, ~nums_enable[0]};
+                hex_dot = dots_enable[0];
+            end
+            2'b01: begin
+                hex_sel = {2'b11, ~nums_enable[1], 1'b1};
+                hex_dot = dots_enable[1];
+            end
+            2'b10: begin
+                hex_sel = {1'b1, ~nums_enable[2], 2'b11};
+                hex_dot = dots_enable[2];
+            end
+            2'b11: begin
+                hex_sel = {~nums_enable[3], 3'b111};
+                hex_dot = dots_enable[3];
+            end
         endcase
     
 endmodule

@@ -21,8 +21,9 @@ module peripherals
 
     output [15:0] led,
     output [3:0] opin,
-    output [6:0] HEX,
-    output [3:0] HEX_Selector
+    output [6:0] hex,
+    output hex_dot,
+    output [3:0] hex_sel
 );
 
     // Peripherals modules
@@ -113,10 +114,11 @@ module peripherals
     wire [31:0] RD_7seg;
     peripheral_display_7seg peripheral_display_7seg(
         .clk(clk),
-        .WD(WD[20:0]),
+        .WD(WD[24:0]),
         .WE(WE_7seg),
-        .display(HEX),
-        .selector(HEX_Selector),
+        .hex(hex),
+        .hex_dot(hex_dot),
+        .hex_sel(hex_sel),
         .RD(RD_7seg)
     );
 

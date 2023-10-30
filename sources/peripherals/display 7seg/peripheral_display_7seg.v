@@ -6,24 +6,27 @@
 
 module peripheral_display_7seg(
     input clk,
-    input [20:0] WD,
+    input [24:0] WD,
     input WE,
 
-    output [6:0] display,
-    output [3:0] selector,
+    output [6:0] hex,
+    output hex_dot,
+    output [3:0] hex_sel,
     output [31:0] RD
 );
 
     // Peripheral registers
     reg [15:0] nums;
     reg [3:0] nums_enable;
+    reg [3:0] dots_enable;
     reg nums_format;
-    assign RD = {nums_format, nums_enable, nums};
+    assign RD = {nums_format, dots_enable, nums_enable, nums};
 
     always @(posedge clk) begin
         nums <= WE ? WD[15:0] : nums;
         nums_enable <= WE ? WD[19:16] : nums_enable;
-        nums_format <= WE ? WD[20] : nums_format;
+        dots_enable <= WE ? WD[23:20] : dots_enable;
+        nums_format <= WE ? WD[24] : nums_format;
     end
 
     wire [15:0] bcd;
@@ -44,9 +47,11 @@ module peripheral_display_7seg(
         .num2(nums_corrected[11:8]),
         .num3(nums_corrected[15:12]),
         .nums_enable(nums_enable),
+        .dots_enable(dots_enable),
 
-        .display(display),
-        .selector(selector)
+        .hex(hex),
+        .hex_dot(hex_dot),
+        .hex_sel(hex_sel)
     );
     
 endmodule

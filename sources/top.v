@@ -15,8 +15,9 @@ module top(
 
     output [15:0] led,
     output [3:0] opin,
-    output [6:0] HEX,
-    output [3:0] HEX_Selector
+    output [6:0] hex,
+    output hex_dot,
+    output [3:0] hex_sel
 );
 
     ///////////////////////////////////////////
@@ -156,8 +157,9 @@ module top(
         .ipin(ipin),
         .led(led),
         .opin(opin),
-        .HEX(HEX),
-        .HEX_Selector(HEX_Selector)
+        .hex(hex),
+        .hex_dot(hex_dot),
+        .hex_sel(hex_sel)
     );
 
     // RESULT

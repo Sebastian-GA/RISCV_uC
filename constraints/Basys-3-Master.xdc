@@ -47,20 +47,20 @@ set_property -dict { PACKAGE_PIN L1    IOSTANDARD LVCMOS33 } [get_ports {led[15]
 
 
 ##7 Segment Display
-set_property -dict { PACKAGE_PIN W7   IOSTANDARD LVCMOS33 } [get_ports {HEX[0]}]
-set_property -dict { PACKAGE_PIN W6   IOSTANDARD LVCMOS33 } [get_ports {HEX[1]}]
-set_property -dict { PACKAGE_PIN U8   IOSTANDARD LVCMOS33 } [get_ports {HEX[2]}]
-set_property -dict { PACKAGE_PIN V8   IOSTANDARD LVCMOS33 } [get_ports {HEX[3]}]
-set_property -dict { PACKAGE_PIN U5   IOSTANDARD LVCMOS33 } [get_ports {HEX[4]}]
-set_property -dict { PACKAGE_PIN V5   IOSTANDARD LVCMOS33 } [get_ports {HEX[5]}]
-set_property -dict { PACKAGE_PIN U7   IOSTANDARD LVCMOS33 } [get_ports {HEX[6]}]
+set_property -dict { PACKAGE_PIN W7   IOSTANDARD LVCMOS33 } [get_ports {hex[0]}]
+set_property -dict { PACKAGE_PIN W6   IOSTANDARD LVCMOS33 } [get_ports {hex[1]}]
+set_property -dict { PACKAGE_PIN U8   IOSTANDARD LVCMOS33 } [get_ports {hex[2]}]
+set_property -dict { PACKAGE_PIN V8   IOSTANDARD LVCMOS33 } [get_ports {hex[3]}]
+set_property -dict { PACKAGE_PIN U5   IOSTANDARD LVCMOS33 } [get_ports {hex[4]}]
+set_property -dict { PACKAGE_PIN V5   IOSTANDARD LVCMOS33 } [get_ports {hex[5]}]
+set_property -dict { PACKAGE_PIN U7   IOSTANDARD LVCMOS33 } [get_ports {hex[6]}]
 
-#set_property -dict { PACKAGE_PIN V7   IOSTANDARD LVCMOS33 } [get_ports dp]
+set_property -dict { PACKAGE_PIN V7   IOSTANDARD LVCMOS33 } [get_ports hex_dot]
 
-set_property -dict { PACKAGE_PIN U2   IOSTANDARD LVCMOS33 } [get_ports {HEX_Selector[0]}]
-set_property -dict { PACKAGE_PIN U4   IOSTANDARD LVCMOS33 } [get_ports {HEX_Selector[1]}]
-set_property -dict { PACKAGE_PIN V4   IOSTANDARD LVCMOS33 } [get_ports {HEX_Selector[2]}]
-set_property -dict { PACKAGE_PIN W4   IOSTANDARD LVCMOS33 } [get_ports {HEX_Selector[3]}]
+set_property -dict { PACKAGE_PIN U2   IOSTANDARD LVCMOS33 } [get_ports {hex_sel[0]}]
+set_property -dict { PACKAGE_PIN U4   IOSTANDARD LVCMOS33 } [get_ports {hex_sel[1]}]
+set_property -dict { PACKAGE_PIN V4   IOSTANDARD LVCMOS33 } [get_ports {hex_sel[2]}]
+set_property -dict { PACKAGE_PIN W4   IOSTANDARD LVCMOS33 } [get_ports {hex_sel[3]}]
 
 
 ##Buttons
