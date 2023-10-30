@@ -8,7 +8,7 @@
 module peripherals
 (
     input clk,
-    input [3:0] A,
+    input [4:0] A,
     input [31:0] WD,
     input WE,
 
@@ -27,7 +27,12 @@ module peripherals
     localparam A_DIN = 0;
     localparam A_DOUT = 4;
     localparam A_TIMER0 = 8;
-    localparam A_7SEG = 12;
+    localparam A_TIMER1 = 12;
+    localparam A_PWM0 = 16;
+    localparam A_ADOUT = 20;
+    localparam A_7SEG = 24;
+
+    localparam N_OUTPUTS = 16;
 
     // Digital input
     wire [31:0] RD_din;
@@ -44,9 +49,8 @@ module peripherals
     wire [31:0] RD_dout;
     digital_out digital_out(
         .clk(clk),
-        .WD(WD[15:0]),
+        .WD(WD[N_OUTPUTS-1:0]),
         .WE(WE_dout),
-        .led(led),
         .RD(RD_dout)
     );
 
@@ -54,12 +58,58 @@ module peripherals
     wire WE_timer0;
     assign WE_timer0 = WE && (A == A_TIMER0);
     wire [31:0] RD_timer0;
-    timer0 timer0(
+    timer #(0) timer0(
         .clk(clk),
         .WD(WD[31:0]),
         .WE(WE_timer0),
         .RD(RD_timer0)
     );
+
+    // Timer1
+    wire WE_timer1;
+    assign WE_timer1 = WE && (A == A_TIMER1);
+    wire [31:0] RD_timer1;
+    timer #(50_000) timer1(
+        .clk(clk),
+        .WD(WD[31:0]),
+        .WE(WE_timer1),
+        .RD(RD_timer1)
+    );
+
+    // PWM0
+    wire WE_pwm0;
+    assign WE_pwm0 = WE && (A == A_PWM0);
+    wire [31:0] RD_pwm0;
+    wire PWM0;
+    pwm pwm1(
+        .clk(clk),
+        .WD(WD[6:0]),
+        .WE(WE_pwm),
+        .PWM(PWM0),
+        .RD(RD_pwm0)
+    );
+
+    // Analog or Digital output
+    wire WE_adout;
+    assign WE_adout = WE && (A == A_ADOUT);
+    reg [N_OUTPUTS-1:0] ad_outputs = 0;
+    wire [31:0] RD_adout;
+    assign RD_adout = ad_outputs;
+
+    // Assign output
+    // For each led, select digital output or pwm depending on value on ad_outputs
+    // If ad_outputs[i] == 1, then the output is pwm
+    // If ad_outputs[i] == 0, then the output is digital
+    genvar i;
+    generate
+        for (i = 0; i < N_OUTPUTS; i = i + 1) begin: loop_outputs
+            assign led[i] = ad_outputs[i] ? PWM0 : RD_dout[i];
+        end
+    endgenerate
+
+    always @(posedge clk) begin
+        ad_outputs <= WE_adout ? WD[N_OUTPUTS-1:0] : ad_outputs;
+    end
 
     // Display 7-segment
     wire WE_7seg;
@@ -80,6 +130,9 @@ module peripherals
             A_DIN: RD = RD_din;
             A_DOUT: RD = RD_dout;
             A_TIMER0: RD = RD_timer0;
+            A_TIMER1: RD = RD_timer1;
+            A_PWM0: RD = RD_pwm0;
+            A_ADOUT: RD = RD_adout;
             A_7SEG: RD = RD_7seg;
             default: RD = 0;
         endcase

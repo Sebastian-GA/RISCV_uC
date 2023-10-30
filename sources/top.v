@@ -146,7 +146,7 @@ module top(
     // PERIPHERALS
     peripherals peripherals(
         .clk(clk),
-        .A(ALUResult[3:0]),
+        .A(ALUResult[4:0]),
         .WD(RD2),
         .WE(PeriWrite & MemWrite),
         .RD(ReadPeri),
