@@ -81,10 +81,10 @@ module peripherals
     assign WE_pwm0 = WE && (A == A_PWM0);
     wire [31:0] RD_pwm0;
     wire PWM0;
-    pwm pwm1(
+    pwm pwm0(
         .clk(clk),
         .WD(WD[6:0]),
-        .WE(WE_pwm),
+        .WE(WE_pwm0),
         .PWM(PWM0),
         .RD(RD_pwm0)
     );
@@ -92,24 +92,16 @@ module peripherals
     // Analog or Digital output
     wire WE_adout;
     assign WE_adout = WE && (A == A_ADOUT);
-    reg [N_OUTPUTS-1:0] ad_outputs = 0;
     wire [31:0] RD_adout;
-    assign RD_adout = ad_outputs;
-
-    // Assign output
-    // For each led, select digital output or pwm depending on value on ad_outputs
-    // If ad_outputs[i] == 1, then the output is pwm
-    // If ad_outputs[i] == 0, then the output is digital
-    genvar i;
-    generate
-        for (i = 0; i < N_OUTPUTS; i = i + 1) begin: loop_outputs
-            assign led[i] = ad_outputs[i] ? PWM0 : RD_dout[i];
-        end
-    endgenerate
-
-    always @(posedge clk) begin
-        ad_outputs <= WE_adout ? WD[N_OUTPUTS-1:0] : ad_outputs;
-    end
+    analog_or_digital_out #(N_OUTPUTS) analog_or_digital_out(
+        .clk(clk),
+        .WD(WD[N_OUTPUTS-1:0]),
+        .WE(WE_adout),
+        .DOUT(RD_dout[N_OUTPUTS-1:0]),
+        .PWM(PWM0),
+        .led(led),
+        .RD(RD_adout)
+    );
 
     // Display 7-segment
     wire WE_7seg;
