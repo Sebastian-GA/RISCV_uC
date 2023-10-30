@@ -30,8 +30,8 @@ module pwm (
     always @ (posedge clk) begin
         pwm_duty_cycle <= WE ? WD[6:0] : pwm_duty_cycle;
 
-        f_div_counter <= (f_div_enable | WE) ? 0 : f_div_counter + 1;
-        pwm_counter <= (pwm_counter == 100) ? 0 : (f_div_enable ? pwm_counter + 1 : pwm_counter);
+        f_div_counter <= (f_div_enable) ? 0 : f_div_counter + 1;
+        pwm_counter <= f_div_enable ? ((pwm_counter == 100) ? 0: pwm_counter + 1) : pwm_counter;
 
         PWM <= (pwm_counter >= pwm_duty_cycle) ? 0 : 1;
     end

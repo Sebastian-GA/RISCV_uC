@@ -4,7 +4,7 @@
 // Author: Sebastian Garcia
 
 
-module analog_or_digital_out #(N_OUTPUTS = 16) (
+module analog_or_digital_out #(N_OUTPUTS = 17) (
     input clk,
     input [N_OUTPUTS-1:0] WD,
     input WE,
@@ -13,6 +13,7 @@ module analog_or_digital_out #(N_OUTPUTS = 16) (
     input PWM,
 
     output [15:0] led,
+    output [3:0] opin,
     output [31:0] RD
 );
 
@@ -26,8 +27,11 @@ module analog_or_digital_out #(N_OUTPUTS = 16) (
     // If ad_outputs[i] == 0, then the output is digital
     genvar i;
     generate
-        for (i = 0; i < N_OUTPUTS; i = i + 1) begin: loop_outputs
+        for (i = 0; i < 16; i = i + 1) begin: loop_leds
             assign led[i] = ad_outputs[i] ? PWM : DOUT[i];
+        end
+        for (i = 16; i < N_OUTPUTS; i = i + 1) begin: loop_opins
+            assign opin[i-16] = ad_outputs[i] ? PWM : DOUT[i];
         end
     endgenerate
 

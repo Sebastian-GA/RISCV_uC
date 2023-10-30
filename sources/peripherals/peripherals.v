@@ -15,10 +15,12 @@ module peripherals
     output reg [31:0] RD,
 
     // Peripherals
-    input [4:0] btn,
     input [15:0] sw,
+    input [4:0] btn,
+    input [3:0] ipin,
 
     output [15:0] led,
+    output [3:0] opin,
     output [6:0] HEX,
     output [3:0] HEX_Selector
 );
@@ -32,14 +34,15 @@ module peripherals
     localparam A_ADOUT = 20;
     localparam A_7SEG = 24;
 
-    localparam N_OUTPUTS = 16;
+    localparam N_OUTPUTS = 20;
 
     // Digital input
     wire [31:0] RD_din;
     digital_in digital_in(
         .clk(clk),
-        .btn(btn),
         .sw(sw),
+        .btn(btn),
+        .ipin(ipin),
         .RD(RD_din)
     );
 
@@ -47,7 +50,7 @@ module peripherals
     wire WE_dout;
     assign WE_dout = WE && (A == A_DOUT);
     wire [31:0] RD_dout;
-    digital_out digital_out(
+    digital_out #(N_OUTPUTS) digital_out(
         .clk(clk),
         .WD(WD[N_OUTPUTS-1:0]),
         .WE(WE_dout),
@@ -100,6 +103,7 @@ module peripherals
         .DOUT(RD_dout[N_OUTPUTS-1:0]),
         .PWM(PWM0),
         .led(led),
+        .opin(opin),
         .RD(RD_adout)
     );
 

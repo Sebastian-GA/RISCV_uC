@@ -9,11 +9,12 @@ module top(
     input clk,
 
     // Peripherals
-    input [4:0] btn,
     input [15:0] sw,
-    // input [4:0] ipins,
+    input [4:0] btn,
+    input [3:0] ipin,
 
     output [15:0] led,
+    output [3:0] opin,
     output [6:0] HEX,
     output [3:0] HEX_Selector
 );
@@ -150,9 +151,11 @@ module top(
         .WD(RD2),
         .WE(PeriWrite & MemWrite),
         .RD(ReadPeri),
-        .btn(btn),
         .sw(sw),
+        .btn(btn),
+        .ipin(ipin),
         .led(led),
+        .opin(opin),
         .HEX(HEX),
         .HEX_Selector(HEX_Selector)
     );
