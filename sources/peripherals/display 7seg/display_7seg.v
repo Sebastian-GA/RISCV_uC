@@ -56,19 +56,19 @@ module display_7seg(
         case (num_selected)
             2'b00: begin
                 hex_sel = {3'b111, ~nums_enable[0]};
-                hex_dot = dots_enable[0];
+                hex_dot = ~dots_enable[0];
             end
             2'b01: begin
                 hex_sel = {2'b11, ~nums_enable[1], 1'b1};
-                hex_dot = dots_enable[1];
+                hex_dot = ~dots_enable[1];
             end
             2'b10: begin
                 hex_sel = {1'b1, ~nums_enable[2], 2'b11};
-                hex_dot = dots_enable[2];
+                hex_dot = ~dots_enable[2];
             end
             2'b11: begin
                 hex_sel = {~nums_enable[3], 3'b111};
-                hex_dot = dots_enable[3];
+                hex_dot = ~dots_enable[3];
             end
         endcase
     
