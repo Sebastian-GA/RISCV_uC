@@ -58,18 +58,18 @@ module peripherals
         .RD(RD_dout)
     );
 
-    // Timer0
+    // Timer0 (micros)
     wire WE_timer0;
     assign WE_timer0 = WE && (A == A_TIMER0);
     wire [31:0] RD_timer0;
-    timer #(0) timer0(
+    timer #(100) timer0(
         .clk(clk),
         .WD(WD[31:0]),
         .WE(WE_timer0),
         .RD(RD_timer0)
     );
 
-    // Timer1
+    // Timer1 (millis)
     wire WE_timer1;
     assign WE_timer1 = WE && (A == A_TIMER1);
     wire [31:0] RD_timer1;

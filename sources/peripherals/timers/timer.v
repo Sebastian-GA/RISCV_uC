@@ -5,7 +5,7 @@
 //         Juliana Pineda
 
 
-module timer #(parameter F_DIV = 50_000)(
+module timer #(parameter F_DIV = 100_000)(
     input clk,
     input [31:0] WD,
     input WE,
