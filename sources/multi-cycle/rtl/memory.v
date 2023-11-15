@@ -24,9 +24,9 @@ module memory(
     output [3:0] hex_sel
 );
 
-    localparam INSTR_MEM_SIZE = 400;  // 100 instructions
+    localparam INSTR_MEM_SIZE = 512;  // 128 instructions
     localparam DATA_MEM_SIZE = 256;
-    localparam PERIPH_ADDR_START = 32'h80000000;
+    localparam PERIPH_ADDR_START = 12'h800;
 
     // Internal memory arrays
     reg [7:0] instr_mem [0:INSTR_MEM_SIZE-1];

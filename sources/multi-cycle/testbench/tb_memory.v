@@ -69,22 +69,22 @@ module tb_data_memory();
         // Testbench Data Memory
 
         // Test 1:
-        // Save number in address 400 (First address of data memory)
+        // Save number in address 512 (First address of data memory)
         WE = 1;
         WD = 32'h2B345FD4;
-        A = 32'd400;
+        A = 32'd512;
         #4;
 
         // Test 2:
-        // Read number from address 400
+        // Read number from address 512
         #1;  // Don't sincronize with clock
-        A = 32'd400;
+        A = 32'd512;
 
         // Test 3:
         // Disable write
         WE = 0;
         WD = 32'hA391FFC3;
-        A = 32'd400;
+        A = 32'd512;
         #4;
 
         $finish;
