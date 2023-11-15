@@ -6,7 +6,7 @@
 
 module memory(
     input clk,
-    input [31:0] A,
+    input [11:0] A,
     input [31:0] WD,
     input WE,
 

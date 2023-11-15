@@ -37,12 +37,12 @@ module top(
     wire RegWrite;
 
     // MEMORY
-    wire [31:0] Adr;
+    wire [11:0] Adr;
     wire [31:0] ReadData;
     reg [31:0] WriteData;
-    wire [31:0] PCNext;
-    reg [31:0] PC = 0;  // TODO: Reduce size
-    reg [31:0] OldPC = 0;
+    wire [11:0] PCNext;
+    reg [11:0] PC = 0;
+    reg [11:0] OldPC = 0;
     reg [31:0] Instr = 0;
     reg [31:0] Data = 0;
 
@@ -72,8 +72,8 @@ module top(
     // TODO: Add Control Unit    
 
     // INSTRUCTION MEMORY
-    assign PCNext = Result;
-    assign Adr = AdrSrc ? Result : PC;
+    assign PCNext = Result[11:0];
+    assign Adr = AdrSrc ? Result[11:0] : PC;
 
     always @(posedge clk) begin
         PC <= PCWrite ? PCNext : PC;
