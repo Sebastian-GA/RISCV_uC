@@ -69,7 +69,7 @@ module top(
     ///////////////////////////////////////////
 
     // CONTROL UNIT
-    
+    // TODO: Add Control Unit    
 
     // INSTRUCTION MEMORY
     assign PCNext = Result;
@@ -161,6 +161,7 @@ module top(
             2'b00: Result = ALUOut;
             2'b01: Result = Data;
             2'b10: Result = ALUResult;
+            // TODO: Add support for LUI
             default: Result = 0;
         endcase
 
