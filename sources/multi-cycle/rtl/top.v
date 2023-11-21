@@ -69,7 +69,25 @@ module top(
     ///////////////////////////////////////////
 
     // CONTROL UNIT
-    // TODO: Add Control Unit    
+    control_unit control_unit(
+        .clk(clk),
+
+        .op(Instr[6:0]),
+        .funct3(Instr[14:12]),
+        .funct7_5(Instr[30]),
+        .zero(Zero),
+
+        .pc_write(PCWrite),
+        .adr_src(AdrSrc),
+        .mem_write(MemWrite),
+        .ir_write(IRWrite),
+        .result_src(ResultSrc),
+        .alu_control(ALUControl),
+        .alu_srcA(ALUSrcA),
+        .alu_srcB(ALUSrcB),
+        .imm_src(ImmSrc),
+        .reg_write(RegWrite)
+    );
 
     // INSTRUCTION MEMORY
     assign PCNext = Result[11:0];
