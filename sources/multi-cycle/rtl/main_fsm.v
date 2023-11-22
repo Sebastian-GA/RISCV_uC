@@ -90,57 +90,137 @@ module main_fsm(
             Fetch:
                 begin
                     adr_src = 0;
-                    ir_write = 0;  // TODO: check
+                    ir_write = 1;
                     alu_srcA = 2'b00;
                     alu_srcB = 2'b10;
                     alu_op = 2'b00;
                     result_src = 2'b10;
-                    pc_update = 1;  // TODO: check
+                    pc_update = 1;
+
+                    // Other outputs
+                    branch = 0;
+                    reg_write = 0;
+                    mem_write = 0;
                 end
             Decode:
                 begin
                     alu_srcA = 2'b01;
                     alu_srcB = 2'b01;
                     alu_op = 2'b00;
+
+                    // Other outputs
+                    branch = 0;
+                    reg_write = 0;
+                    mem_write = 0;
+                    ir_write = 0;
+                    result_src = 2'b00;
+                    adr_src = 0;
+                    pc_update = 0;
                 end
             MemAdr:
                 begin
                     alu_srcA = 2'b10;
                     alu_srcB = 2'b01;
                     alu_op = 2'b00;
+
+                    // Other outputs
+                    branch = 0;
+                    reg_write = 0;
+                    mem_write = 0;
+                    ir_write = 0;
+                    result_src = 2'b00;
+                    adr_src = 0;
+                    pc_update = 0;
                 end
             MemRead:
                 begin
                     result_src = 2'b00;
                     adr_src = 1;
+
+                    // Other outputs
+                    branch = 0;
+                    reg_write = 0;
+                    mem_write = 0;
+                    ir_write = 0;
+                    alu_srcA = 2'b00;
+                    alu_srcB = 2'b00;
+                    alu_op = 2'b00;
+                    pc_update = 0;
                 end
             MemWB:
                 begin
                     result_src = 2'b01;
-                    reg_write = 1;  // TODO: check
+                    reg_write = 1;
+
+                    // Other outputs
+                    branch = 0;
+                    mem_write = 0;
+                    ir_write = 0;
+                    alu_srcA = 2'b00;
+                    alu_srcB = 2'b00;
+                    alu_op = 2'b00;
+                    adr_src = 0;
+                    pc_update = 0;
                 end
             MemWrite:
                 begin
                     result_src = 2'b00;
                     adr_src = 1;
-                    mem_write = 1;  // TODO: check
+                    mem_write = 1;
+
+                    // Other outputs
+                    branch = 0;
+                    reg_write = 0;
+                    ir_write = 0;
+                    alu_srcA = 2'b00;
+                    alu_srcB = 2'b00;
+                    alu_op = 2'b00;
+                    pc_update = 0;
                 end
             ExecuteR:
                 begin
                     alu_srcA = 2'b10;
                     alu_srcB = 2'b00;
                     alu_op = 2'b10;
+
+                    // Other outputs
+                    branch = 0;
+                    reg_write = 0;
+                    mem_write = 0;
+                    ir_write = 0;
+                    result_src = 2'b00;
+                    adr_src = 0;
+                    pc_update = 0;
                 end
             ExecuteI:
                 begin
                     alu_srcA = 2'b10;
                     alu_srcB = 2'b01;
                     alu_op = 2'b10;
+
+                    // Other outputs
+                    branch = 0;
+                    reg_write = 0;
+                    mem_write = 0;
+                    ir_write = 0;
+                    result_src = 2'b00;
+                    adr_src = 0;
+                    pc_update = 0;
                 end
             ALUWB:
                 begin
                     result_src = 2'b00;
-                    reg_write = 1;  // TODO: check
+                    reg_write = 1;
+
+                    // Other outputs
+                    branch = 0;
+                    mem_write = 0;
+                    ir_write = 0;
+                    alu_srcA = 2'b00;
+                    alu_srcB = 2'b00;
+                    alu_op = 2'b00;
+                    adr_src = 0;
+                    pc_update = 0;
                 end
             BEQ:
                 begin
@@ -148,7 +228,14 @@ module main_fsm(
                     alu_srcB = 2'b00;
                     alu_op = 2'b01;
                     result_src = 2'b00;
-                    branch = 1;  // TODO: check
+                    branch = 1;
+
+                    // Other outputs
+                    reg_write = 0;
+                    mem_write = 0;
+                    ir_write = 0;
+                    adr_src = 0;
+                    pc_update = 0;
                 end
             JAL:
                 begin
@@ -156,7 +243,14 @@ module main_fsm(
                     alu_srcB = 2'b10;
                     alu_op = 2'b00;
                     result_src = 2'b00;
-                    pc_update = 1;  // TODO: check
+                    pc_update = 1;
+
+                    // Other outputs
+                    branch = 0;
+                    reg_write = 0;
+                    mem_write = 0;
+                    ir_write = 0;
+                    adr_src = 0;
                 end
             // default:
         endcase
