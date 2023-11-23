@@ -179,8 +179,8 @@ module top(
             2'b00: Result = ALUOut;
             2'b01: Result = Data;
             2'b10: Result = ALUResult;
-            // TODO: Add support for LUI
-            default: Result = 0;
+            2'b11: Result = ImmExt;
+            // default: Result = 0;
         endcase
 
 endmodule

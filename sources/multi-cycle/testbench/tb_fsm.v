@@ -65,6 +65,10 @@ module tb_fsm();
         op = 7'b1100011;
         #6;
 
+        // U-type
+        op = 7'b0110111;
+        #6;
+
         $finish;
     end
 

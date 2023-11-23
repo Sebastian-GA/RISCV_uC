@@ -29,10 +29,11 @@ module main_fsm(
     parameter MemWB = 4'b0100;
     parameter MemWrite = 4'b0101;
     parameter ExecuteR = 4'b0110;
-    parameter ExecuteI = 4'b0111;    
+    parameter ExecuteI = 4'b0111;
     parameter ALUWB = 4'b1000;
     parameter BEQ = 4'b1001;
     parameter JAL = 4'b1010;
+    parameter LUI = 4'b1011;
 
     // State registers
     reg [3:0] present_state = Fetch;
@@ -55,7 +56,7 @@ module main_fsm(
                     7'b0010011: next_state = ExecuteI; // I-type
                     7'b1101111: next_state = JAL; // jal
                     7'b1100011: next_state = BEQ; // beq
-                    // 7'b0110111: next_state = ALUWB; // U-type TODO: check
+                    7'b0110111: next_state = LUI; // U-type
                     default: next_state = Fetch; // Fault recovery
                 endcase
             MemAdr:
@@ -80,6 +81,8 @@ module main_fsm(
                 next_state = Fetch;
             JAL:
                 next_state = ALUWB;
+            LUI:
+                next_state = Fetch;
             default:
                 next_state = Fetch; // Fault recovery
         endcase
@@ -251,6 +254,21 @@ module main_fsm(
                     mem_write = 0;
                     ir_write = 0;
                     adr_src = 0;
+                end
+            LUI:
+                begin
+                    result_src = 2'b11;
+                    reg_write = 1;
+
+                    // Other outputs
+                    branch = 0;
+                    mem_write = 0;
+                    ir_write = 0;
+                    alu_srcA = 2'b00;
+                    alu_srcB = 2'b00;
+                    alu_op = 2'b00;
+                    adr_src = 0;
+                    pc_update = 0;
                 end
             // default:
         endcase

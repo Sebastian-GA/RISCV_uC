@@ -1,3 +1,7 @@
 # Ignore simulation files
 *.out
 *.vcd
+
+# Ignore slides
+*.pdf
+*.pptx
