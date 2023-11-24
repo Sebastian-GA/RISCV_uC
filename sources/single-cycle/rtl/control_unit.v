@@ -24,6 +24,7 @@ module control_unit(
     wire [1:0] alu_op;
     wire branch;
     wire jump;
+    assign pc_src = (branch & zero) | jump;
 
     main_decoder main_decoder(
         .op(op),
@@ -45,7 +46,5 @@ module control_unit(
         .funct7_5(funct7_5),
         .alu_control(alu_control)
     );
-
-    assign pc_src = (branch & zero) | jump;
 
 endmodule
