@@ -27,7 +27,7 @@ This peripheral can be accessed through the following register:
 
 #### Digital Input Register (DIN_REG)
 
--   **Address:** 0x800
+-   **Address:** 0x700
 -   **Description:** This register is used to read the value of the digital input pins.
 -   **Bits:**
     -   **[15:0]** _(R)_ - Switches: SW[15:0]
@@ -41,10 +41,10 @@ This peripheral does not require any configuration.
 
 ### Example Code
 
-```assembly
+```
 # Example: Read the value of the SW[3] switch and store it in register t0
 
-lw t0, 0x800(x0) # Load the value of the DIN_REG into register t0
+lw t0, 0x700(x0) # Load the value of the DIN_REG into register t0
 andi t0, t0, 0x8 # Mask the value of t0 to only keep the value of SW[3]
 srli t0, t0, 3   # Shift the value of t0 to the right by 3 bits
 
@@ -61,7 +61,7 @@ This peripheral can be controlled through the following registers:
 
 #### Digital Output Register (DOUT_REG)
 
--   **Address:** 0x804
+-   **Address:** 0x704
 -   **Description:** This register is used to write the digital value of the output pins.
 -   **Bits:**
     -   **[15:0]** _(R/W-0)_ - LEDs: LED[15:0]
@@ -70,7 +70,7 @@ This peripheral can be controlled through the following registers:
 
 #### Analog / Digital Output Register (ADOUT_REG)
 
--   **Address:** 0x814
+-   **Address:** 0x714
 -   **Description:** This register is used to configure the analog / digital output pins. The analog / digital output pins can be configured as either analog or digital pins. Analog output refers to the ability to output a PWM signal. See the [PWM peripheral](#peripheral-pwm0) for more information. **Setting a bit to 1 configures the corresponding pin as an analog (PWM) output pin. Setting a bit to 0 configures the corresponding pin as a digital output pin.**
 -   **Bits:**
     -   **[15:0]** _(R/W-0)_ - LEDs: LED[15:0]
@@ -83,7 +83,7 @@ To configure the digital output peripheral, write the desired value to the DOUT_
 
 ### Example Code
 
-```assembly
+```
 # Example: Turn on LED[0] and LED[15]
 
 # By default, all pins are configured as digital output pins
@@ -98,7 +98,7 @@ slli t1, t0, 15  # Shift the value of t0 to the left by 15 bits
 # Concatenate output values of LED[0] and LED[15]
 add t0, t0, t1   # Add the values of t0 and t1 and store the result in t0
 # Write the value of t0 to the DOUT_REG register
-sw t0, 0x804(x0) # Write the value of t0 to the DOUT_REG register
+sw t0, 0x704(x0) # Write the value of t0 to the DOUT_REG register
 ```
 
 ## Peripheral Timer0
