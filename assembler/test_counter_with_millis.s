@@ -8,15 +8,14 @@
 # s1 = $initial_time
 # s2 = 1000ms
 
-# Main
-main:
-	# Reset $counter and $initial_time
-	addi s0, zero, 0
-    addi s1, zero, 0
-    
-    # Delay = 1000ms
-    addi s2, zero, 1000 
+# Reset $counter and $initial_time
+addi s0, zero, 0
+addi s1, zero, 0
 
+# Delay = 1000ms
+addi s2, zero, 1000 
+
+# Infinite loop
 loop:
     
     # if((current_time - $initial_time) > 1000ms)
@@ -28,10 +27,7 @@ loop:
         addi s0, s0, 1  # increment $counter
         
         # Print $counter on display-7seg
-        # addi t0, zero, 0xFF
-        # slli t0, t0, 8
-        # addi t0, t0, 0xFF
-        and t0, zero, s0  # Save $counter on t0
+        add t0, zero, s0  # Save $counter on t0
         addi t1, zero, 0b1111  # Enable 7segs
         slli t1, t1, 16  # Put enables on right index
         addi t2, zero, 0b0000  # Disable dots
