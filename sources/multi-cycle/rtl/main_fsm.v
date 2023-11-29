@@ -270,7 +270,22 @@ module main_fsm(
                     adr_src = 0;
                     pc_update = 0;
                 end
-            // default:
+            default: // Fault recovery
+                begin
+                    // Same as Fetch
+                    adr_src = 0;
+                    ir_write = 1;
+                    alu_srcA = 2'b00;
+                    alu_srcB = 2'b10;
+                    alu_op = 2'b00;
+                    result_src = 2'b10;
+                    pc_update = 1;
+
+                    // Other outputs
+                    branch = 0;
+                    reg_write = 0;
+                    mem_write = 0;
+                end
         endcase
 
 endmodule
