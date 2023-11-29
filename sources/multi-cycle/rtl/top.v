@@ -31,8 +31,8 @@ module top(
     wire IRWrite;
     wire [1:0] ResultSrc;
     wire [2:0] ALUControl;
-    wire ALUSrcA;
-    wire ALUSrcB;
+    wire [1:0] ALUSrcA;
+    wire [1:0] ALUSrcB;
     wire [2:0] ImmSrc;
     wire RegWrite;
 
