@@ -25,7 +25,7 @@ addi s4, zero, 500
 # Main loop
 loop:   
 	# Read input peripheral
-	lw t0, 0x100(zero)
+	lw t0, 0x700(zero)
     srli s1, t0, 16
     andi s1, s1, 1  # Read $sound_sensor
     srli s2, t0, 20
@@ -38,7 +38,7 @@ loop:
         	j omit_init_window
         #else
         init_window:
-        	lw s5, 0x10C(zero)  # $initial_window_time = timer_1 : millis()
+        	lw s5, 0x70C(zero)  # $initial_window_time = timer_1 : millis()
          omit_init_window:
         addi s3, zero, 1  # $led = HIGH
 		addi s6, s6, 1  # $pulses_counter += 1
@@ -53,7 +53,7 @@ loop:
     # if($pulses_counter != 0)
     beq s6, zero, omit_measure_window
     	# if((current_time - $initial_window_time) > $MAX_WINDOW_TIME)
-        lw t0, 0x10C(zero)  # t0 = current_time: timer_1: millis()
+        lw t0, 0x70C(zero)  # t0 = current_time: timer_1: millis()
         sub t1, t0, s5  # t1 = current_time - $initial_window_time        
         slt t0, s4, t1  # t0 = $MAX_WINDOW_TIME < t1
         beq t0, zero, omit_finish_window
@@ -75,7 +75,7 @@ loop:
             add t0, t0, t2
             add t0, t0, t3
             # write on peripheral
-            sw t0, 0x118(zero)
+            sw t0, 0x718(zero)
             
             ###
             # Depending on $pulses_counter put $level_led output
@@ -108,14 +108,14 @@ loop:
 	# Write output peripheral
     slli t0, s7, 13  # $level_led
     add t0, s3, t0  # concatenate outputs
-	sw t0, 0x104(zero)  # set the output
+	sw t0, 0x704(zero)  # set the output
 
 
 	# Delay 100us
     addi t0, zero, 100
-    lw t1, 0x108(zero)  # t1 = init_delay : micros()
+    lw t1, 0x708(zero)  # t1 = init_delay : micros()
    	repeat_delay:
-    lw t2, 0x108(zero)  # t2 = current_time
+    lw t2, 0x708(zero)  # t2 = current_time
     sub t3, t2, t1  # t3 = current_time - init_delay
     slt t2, t0, t3  # t2 = $100us < t3
     beq t2, zero, repeat_delay

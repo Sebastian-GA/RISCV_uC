@@ -37,7 +37,7 @@ module peripheral_display_7seg(
         .bcd(bcd)
     );
 
-    // If nums_format is 1, input is written in binary to its converted to BCD
+    // If nums_format is 1, input is written in binary and its converted to BCD
     assign nums_corrected = nums_format ? bcd : nums;
 
     display_7seg display_7seg(
