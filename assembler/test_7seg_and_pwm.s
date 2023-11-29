@@ -1,7 +1,7 @@
 # test_7seg_and_pwm.s
 # Test 7seg and PWM
 
-# Using [6:0] sw as duty cycle
+# Using SW[6:0] as duty cycle
 # Display current duty cycle on 7seg display
 # Output PWM on all pins (leds and JA pins 7 to 10)
 

@@ -1,3 +1,8 @@
+# test_counter_with_millis.s
+# Test counter with millis
+
+# This program counts the number of times that the delay is done
+# and shows it on the display-7seg
 
 # Main loop
 main:
