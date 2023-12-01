@@ -13,7 +13,3 @@ TODO: Add information about the multi-cycle architecture.
 ## Control Unit Overview
 
 TODO: Add information about the control unit.
-
-## License
-
-This section of the repository is licensed under the [license name/version]. Refer to the [LICENSE](LICENSE) file for more details.

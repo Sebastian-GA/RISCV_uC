@@ -5,16 +5,17 @@
 //         Juliana Pineda
 
 
-module digital_out #(N_OUTPUTS = 16)(
+module digital_out
+(
     input clk,
-    input [N_OUTPUTS-1:0] WD,
+    input [19:0] WD,
     input WE,
     
     output [31:0] RD
 );
 
     // Peripheral registers
-    reg [N_OUTPUTS-1:0] outputs = 0;
+    reg [19:0] outputs = 0;
     assign RD = outputs;
 
     always @ (posedge clk)
