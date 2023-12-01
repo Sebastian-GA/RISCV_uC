@@ -32,7 +32,7 @@ module peripherals
     localparam A_TIMER0 = 8;
     localparam A_TIMER1 = 12;
     localparam A_PWM0 = 16;
-    localparam A_ADOUT = 20;
+    localparam A_OUTM = 20;
     localparam A_7SEG = 24;
 
     localparam N_OUTPUTS = 20;
@@ -93,19 +93,19 @@ module peripherals
         .RD(RD_pwm0)
     );
 
-    // Analog or Digital output
-    wire WE_adout;
-    assign WE_adout = WE && (A == A_ADOUT);
-    wire [31:0] RD_adout;
-    analog_or_digital_out analog_or_digital_out(
+    // Output mode
+    wire WE_outm;
+    assign WE_outm = WE && (A == A_OUTM);
+    wire [31:0] RD_outm;
+    out_mode out_mode(
         .clk(clk),
         .WD(WD[19:0]),
-        .WE(WE_adout),
+        .WE(WE_outm),
         .DOUT(RD_dout[19:0]),
         .PWM(PWM0),
         .led(led),
         .opin(opin),
-        .RD(RD_adout)
+        .RD(RD_outm)
     );
 
     // Display 7-segment
@@ -130,7 +130,7 @@ module peripherals
             A_TIMER0: RD = RD_timer0;
             A_TIMER1: RD = RD_timer1;
             A_PWM0: RD = RD_pwm0;
-            A_ADOUT: RD = RD_adout;
+            A_OUTM: RD = RD_outm;
             A_7SEG: RD = RD_7seg;
             default: RD = 0;
         endcase

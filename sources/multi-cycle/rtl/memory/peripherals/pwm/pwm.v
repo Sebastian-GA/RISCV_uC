@@ -3,7 +3,6 @@
 // PWM module at 1kHz
 // Author: Sebastian Garcia
 
-// 
 
 module pwm (
     input clk,

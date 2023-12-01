@@ -10,12 +10,15 @@ Welcome to the peripherals section of our RISC-V microcontroller documentation. 
     1. [Digital Input Register (DIN_REG)](#digital-input-register-din_reg)
 2. [Digital Output](#peripheral-digital-output)
     1. [Digital Output Register (DOUT_REG)](#digital-output-register-dout_reg)
-    2. [Analog / Digital Output Register (ADOUT_REG)](#analog--digital-output-register-adout_reg)
+    2. [Output Mode Register (OUTM_REG)](#output-mode-register-outm_reg)
 3. [Timer0](#peripheral-timer0)
+    1. [Timer0 Register (TIMER0_REG)](#timer0-register-timer0_reg)
 4. [Timer1](#peripheral-timer1)
+    1. [Timer1 Register (TIMER1_REG)](#timer1-register-timer1_reg)
 5. [PWM0](#peripheral-pwm0)
+    1. [PWM0 Register (PWM0_REG)](#pwm0-register-pwm0_reg)
 6. [7-Segment Display](#peripheral-7-segment-display)
-7. [License](#license)
+    1. [7-Segment Display Register (7SEG_REG)](#7-segment-display-register-7seg_reg)
 
 ## Peripheral Digital Input
 
@@ -68,10 +71,10 @@ This peripheral can be controlled through the following registers:
     -   **[19:16]** _(R/W-0)_ - Output Pins: [JA10, JA9, JA8, JA7]
     -   **[31:20]** _(U-0)_ - Not Implemented (Read as 0)
 
-#### Analog / Digital Output Register (ADOUT_REG)
+#### Output Mode Register (OUTM_REG)
 
 -   **Address:** 0x714
--   **Description:** This register is used to configure the analog / digital output pins. The analog / digital output pins can be configured as either analog or digital pins. Analog output refers to the ability to output a PWM signal. See the [PWM peripheral](#peripheral-pwm0) for more information. **Setting a bit to 1 configures the corresponding pin as an analog (PWM) output pin. Setting a bit to 0 configures the corresponding pin as a digital output pin.**
+-   **Description:** This register is used to configure the output pins. The output pins can be configured as either analog or digital pins. Analog output refers to the ability to output a PWM signal. See the [PWM peripheral](#peripheral-pwm0) for more information. **Setting a bit to 1 configures the corresponding pin as a PWM output pin. Setting a bit to 0 configures the corresponding pin as a digital output pin.**
 -   **Bits:**
     -   **[15:0]** _(R/W-0)_ - LEDs: LED[15:0]
     -   **[19:16]** _(R/W-0)_ - Output Pins: [JA10, JA9, JA8, JA7]
@@ -79,7 +82,7 @@ This peripheral can be controlled through the following registers:
 
 ### Configuration
 
-To configure the digital output peripheral, write the desired value to the DOUT_REG and ADOUT_REG registers. The DOUT_REG register is used to set the digital value of the output pins. The ADOUT_REG register is used to configure the analog (PWM) / digital output pins.
+To configure the digital output peripheral, first write the desired mode to the OUTM_REG. See the [OUTM_REG](#output-mode-register-outm_reg) register for more information.
 
 ### Example Code
 
@@ -87,8 +90,8 @@ To configure the digital output peripheral, write the desired value to the DOUT_
 # Example: Turn on LED[0] and LED[15]
 
 # By default, all pins are configured as digital output pins
-# See the ADOUT_REG register for more information
-# See the PWM peripheral for information on how to configure the pins as analog output pins
+# See the OUTM_REG register for more information
+# See the PWM peripheral for information on how to configure the pins as PWM output pins
 
 # Set output value of LED[0] to 1
 addi t0, x0, 0x1 # Set the value of t0 to 0x1
@@ -103,11 +106,57 @@ sw t0, 0x704(x0) # Write the value of t0 to the DOUT_REG register
 
 ## Peripheral Timer0
 
-TODO: Add documentation
+This physical timer is designed to seamlessly interface with the RISC-V microcontroller. Timer0 is a 32-bit timer that operates at 1MHz, which means that it increments its value every 1us. This section offers insights into its functionalities, use cases, and integration with the RISC-V microcontroller.
+
+### Register Map
+
+This peripheral is accessed through the following register:
+
+#### Timer0 Register (TIMER0_REG)
+
+-   **Address:** 0x708
+-   **Description:** This register is used to write or read the value of the timer.
+-   **Bits:**
+    -   **[31:0]** _(R/W-0)_ - Timer0: TIMER0[31:0]
+
+### Configuration
+
+This peripheral does not require any configuration.
+
+### Example Code
+
+```
+# Example: Generate a 1ms delay
+
+TODO: Add example code
+```
 
 ## Peripheral Timer1
 
-TODO: Add documentation
+This physical timer is designed to seamlessly interface with the RISC-V microcontroller. Timer1 is a 32-bit timer that operates at 1kHz, which means that it increments its value every 1ms. This section offers insights into its functionalities, use cases, and integration with the RISC-V microcontroller.
+
+### Register Map
+
+This peripheral is accessed through the following register:
+
+#### Timer1 Register (TIMER1_REG)
+
+-   **Address:** 0x70C
+-   **Description:** This register is used to write or read the value of the timer.
+-   **Bits:**
+    -   **[31:0]** _(R/W-0)_ - Timer1: TIMER1[31:0]
+
+### Configuration
+
+This peripheral does not require any configuration.
+
+### Example Code
+
+```
+# Example: Generate a 1s delay
+
+TODO: Add example code
+```
 
 ## Peripheral PWM0
 
@@ -116,8 +165,3 @@ TODO: Add documentation
 ## Peripheral 7-Segment Display
 
 TODO: Add documentation
-
-## License
-
-TODO: Add license
-This documentation is licensed under the [license name/version]. Refer to the [LICENSE](LICENSE) file for more details.
