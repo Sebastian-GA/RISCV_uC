@@ -25,12 +25,12 @@ module memory(
 );
 
     localparam INSTR_MEM_SIZE = 512;  // 128 instructions
-    localparam DATA_MEM_SIZE = 256;
+    localparam DATA_MEM_SIZE = 256;  // 256 Bytes
     localparam PERIPH_ADDR_START = 12'h700;
 
     // Internal memory arrays
     reg [7:0] instr_mem [0:INSTR_MEM_SIZE-1];
-    reg [7:0] data_mem [0:DATA_MEM_SIZE-1];
+    reg [31:0] data_mem [0:DATA_MEM_SIZE/4-1];  // Word based memory (4 bytes per word)
 
     // Enable signals
     wire enable_peripherals;
@@ -44,16 +44,20 @@ module memory(
     // Write data_mem
     always @(posedge clk)
         if (WE & enable_data_mem) begin
-            data_mem[A - INSTR_MEM_SIZE] <= WD[31:24];
-            data_mem[A+1 - INSTR_MEM_SIZE] <= WD[23:16];
-            data_mem[A+2 - INSTR_MEM_SIZE] <= WD[15:8];
-            data_mem[A+3 - INSTR_MEM_SIZE] <= WD[7:0];
+            // data_mem[A - INSTR_MEM_SIZE] <= WD[31:24];
+            // data_mem[A+1 - INSTR_MEM_SIZE] <= WD[23:16];
+            // data_mem[A+2 - INSTR_MEM_SIZE] <= WD[15:8];
+            // data_mem[A+3 - INSTR_MEM_SIZE] <= WD[7:0];
+
+            data_mem[(A - INSTR_MEM_SIZE)/4] <= WD[31:0];  // Done this way to write only once the memory and avoid warnings
+                                                           // also, allows memory to be implemented using RAM blocks
+                                                           // instead of registers. This increases the maximum frequency
         end
     
     // Initialize memory
     initial begin
         $readmemh("instr_memory.mem", instr_mem, 0, INSTR_MEM_SIZE-1);
-        $readmemh("data_memory.mem", data_mem, 0, DATA_MEM_SIZE-1);
+        $readmemh("data_memory.mem", data_mem, 0, DATA_MEM_SIZE/4-1);
     end
     
     // Peripherals
@@ -81,7 +85,8 @@ module memory(
     always @(*)
         case ({enable_peripherals, enable_data_mem, enable_instr_mem})
             3'b001: RD = {instr_mem[A], instr_mem[A+1], instr_mem[A+2], instr_mem[A+3]};
-            3'b010: RD = {data_mem[A - INSTR_MEM_SIZE], data_mem[A+1 - INSTR_MEM_SIZE], data_mem[A+2 - INSTR_MEM_SIZE], data_mem[A+3 - INSTR_MEM_SIZE]};
+            // 3'b010: RD = {data_mem[A - INSTR_MEM_SIZE], data_mem[A+1 - INSTR_MEM_SIZE], data_mem[A+2 - INSTR_MEM_SIZE], data_mem[A+3 - INSTR_MEM_SIZE]};
+            3'b010: RD = data_mem[(A - INSTR_MEM_SIZE)/4];
             3'b100: RD = RD_peripherals;
             default: RD = 0;
         endcase
