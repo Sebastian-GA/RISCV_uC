@@ -62,7 +62,7 @@ module peripherals
     wire WE_timer0;
     assign WE_timer0 = WE && (A == A_TIMER0);
     wire [31:0] RD_timer0;
-    timer #(100) timer0(
+    timer #(111) timer0(
         .clk(clk),
         .WD(WD[31:0]),
         .WE(WE_timer0),
@@ -73,7 +73,7 @@ module peripherals
     wire WE_timer1;
     assign WE_timer1 = WE && (A == A_TIMER1);
     wire [31:0] RD_timer1;
-    timer #(100_000) timer1(
+    timer #(111_111) timer1(
         .clk(clk),
         .WD(WD[31:0]),
         .WE(WE_timer1),

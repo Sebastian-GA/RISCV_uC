@@ -21,8 +21,8 @@ module pwm (
     reg [6:0] pwm_counter = 0;
 
     // Frequency divider
-    localparam F_DIV = 1_000;
-    reg [9:0] f_div_counter = 0;
+    localparam F_DIV = 1_111;
+    reg [10:0] f_div_counter = 0;
     wire f_div_enable;
     assign f_div_enable = (f_div_counter == F_DIV) ? 1 : 0;
 
