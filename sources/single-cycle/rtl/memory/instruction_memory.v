@@ -5,7 +5,7 @@
 
 
 module instruction_memory
-# (parameter N = 8)(
+# (parameter N = 9)(
     input [N-1:0] A,
 
     output [31:0] RD

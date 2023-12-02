@@ -24,8 +24,8 @@ module top(
     // DECLARATIONS
     ///////////////////////////////////////////
     
-    localparam INST_MEM_N = 8;
-    localparam DATA_MEM_N = 8;
+    localparam INST_MEM_N = 9;  // 128 instructions
+    localparam DATA_MEM_N = 8;  // 256 Bytes
 
     // CONTROL UNIT
     wire Zero;
@@ -59,8 +59,11 @@ module top(
     // DATA MEMORY
     wire [31:0] ReadData;
     wire [31:0] ReadPeri;
-    wire [31:0] ReadMemPeri;
-    wire PeriWrite;
+    reg [31:0] ReadMemPeri;
+    wire [DATA_MEM_N-1:0] ADDR_Data;
+    wire [4:0] ADDR_peripherals;
+    wire enable_data_mem;
+    wire enable_peripherals;
 
     // RESULT
     reg [31:0] Result;
@@ -96,7 +99,7 @@ module top(
     end
 
     instruction_memory #(INST_MEM_N) instruction_memory(
-        .A(PC[INST_MEM_N-1:0]),
+        .A(PC),
         .RD(Instr)
     );
 
@@ -132,25 +135,34 @@ module top(
 
 
     // Select Data Memory or Peripherals
-    assign PeriWrite = ALUResult[DATA_MEM_N];  // If 1 use peripherals, if 0 use data memory
-    assign ReadMemPeri = PeriWrite ? ReadPeri : ReadData;
-
+    assign enable_data_mem = (ALUResult >= 2**INST_MEM_N) & (ALUResult < (2**INST_MEM_N + 2**DATA_MEM_N));
+    assign enable_peripherals = (ALUResult >= 12'h700);
+    
+    assign ADDR_Data = ALUResult - 2**INST_MEM_N;
+    assign ADDR_peripherals = ALUResult - 12'h700;
+    
+    always @(*)
+        case ({enable_peripherals, enable_data_mem})
+            2'b01: ReadMemPeri = ReadData;
+            2'b10: ReadMemPeri = ReadPeri;
+            default: ReadMemPeri = 0;
+        endcase
 
     // DATA MEMORY
     data_memory #(DATA_MEM_N) data_memory(
         .clk(clk),
-        .A(ALUResult[DATA_MEM_N-1:0]),
+        .A(ADDR_Data),
         .WD(RD2),
-        .WE(~PeriWrite & MemWrite),
+        .WE(MemWrite & enable_data_mem),
         .RD(ReadData)
     );
 
     // PERIPHERALS
     peripherals peripherals(
         .clk(clk),
-        .A(ALUResult[4:0]),
+        .A(ADDR_peripherals),
         .WD(RD2),
-        .WE(PeriWrite & MemWrite),
+        .WE(MemWrite & enable_peripherals),
         .RD(ReadPeri),
         .sw(sw),
         .btn(btn),
@@ -167,7 +179,7 @@ module top(
         case (ResultSrc)
             2'b00: Result = ALUResult;
             2'b01: Result = ReadMemPeri;
-            2'b10: Result = PCPlus4;  // Autocomplete 32bits
+            2'b10: Result = PCPlus4;
             2'b11: Result = ImmExt;
         endcase
     end
