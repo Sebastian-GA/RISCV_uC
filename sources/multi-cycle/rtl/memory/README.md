@@ -10,7 +10,7 @@ The memory architecture in the multi-cycle version of our RISC-V microcontroller
 
 The memory map for the multi-cycle version of our RISC-V microcontroller is shown below:
 
-![Memory Map](../../../../images/mc_memory_map.png)
+![Memory Map](../../../../images/memory_map.png)
 
 The memory map is divided into 3 sections:
 
