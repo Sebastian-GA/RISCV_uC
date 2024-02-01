@@ -126,9 +126,15 @@ This peripheral does not require any configuration.
 ### Example Code
 
 ```
-# Example: Generate a 1ms delay
+# Example: Generate a 100us delay
 
-TODO: Add example code
+addi t0, x0, 100
+lw t1, 0x708(x0)  # t1 = init_delay : micros()
+repeat_delay:
+lw t2, 0x708(x0)  # t2 = current_time
+sub t3, t2, t1  # t3 = current_time - init_delay
+slt t2, t0, t3  # t2 = $100us < t3
+beq t2, x0, repeat_delay
 ```
 
 ## Peripheral Timer1
@@ -153,15 +159,91 @@ This peripheral does not require any configuration.
 ### Example Code
 
 ```
-# Example: Generate a 1s delay
+# Example: Generate a 500ms delay
 
-TODO: Add example code
+addi t0, x0, 500
+lw t1, 0x70C(x0)  # t1 = init_delay : millis()
+repeat_delay:
+lw t2, 0x70C(x0)  # t2 = current_time
+sub t3, t2, t1  # t3 = current_time - init_delay
+slt t2, t0, t3  # t2 = $500ms < t3
+beq t2, x0, repeat_delay
 ```
 
 ## Peripheral PWM0
 
-TODO: Add documentation
+This physical timer is designed to seamlessly interface with the RISC-V microcontroller. PWM0 is a PWM generator that operates at 1kHz. This module can be used to generate PWM signals on the output pins. A useful application of this module is to control the brightness of LEDs. This section offers insights into its functionalities, use cases, and integration with the RISC-V microcontroller.
+
+### Register Map
+
+This peripheral is accessed through the following register:
+
+#### PWM0 Register (PWM0_REG)
+
+-   **Address:** 0x710
+-   **Description:** This register is used to write or read the value of the duty cycle of the PWM signal.
+-   **Bits:**
+    -   **[6:0]** _(R/W-0)_ - PWM0: PWM0[6:0]
+    -   **[31:7]** _(U-0)_ - Not Implemented (Read as 0)
+
+### Configuration
+
+To configure the PWM0 peripheral, first write the desired mode to the OUTM_REG. See the [OUTM_REG](#output-mode-register-outm_reg) register for more information. Then, write the desired duty cycle to the PWM0_REG register. See the [PWM0_REG](#pwm0-register-pwm0_reg) register for more information.
+
+### Example Code
+
+```
+# Example: Generate a PWM signal with a 50% duty cycle on LED[0]
+
+# Configure LED[0] as a PWM output pin
+addi t0, x0, 0x1
+sw t0, 0x714(x0) # Write the value of t0 to the OUTM_REG register
+
+# Set the duty cycle of the PWM signal to 50%
+addi t0, x0, 0x32
+sw t0, 0x710(x0)  # Write the value of t0 to the PWM0_REG register
+```
 
 ## Peripheral 7-Segment Display
 
-TODO: Add documentation
+This peripheral is designed to seamlessly interface with the RISC-V microcontroller. This peripheral can be used to display numbers on the 7-segment display. This section offers insights into its functionalities, use cases, and integration with the RISC-V microcontroller.
+
+### Register Map
+
+This peripheral is accessed through the following register:
+
+#### 7-Segment Display Register (7SEG_REG)
+
+-   **Address:** 0x718
+-   **Description:** This register is used to write or read the value of the 7-segment display.
+-   **Bits:**
+    -   **[15:0]** _(R/W-0)_ - NUMS: The value to display in the display. The format of the numbers can vary depending on nums_format. See the nums_format field for more information.
+    -   \*_[19:16]_+ _(R/W-0)_ - NUMS_ENABLE: Enables the display of the numbers. The value of this field is a 4-bit mask. Each bit corresponds to a digit on the 7-segment display. Setting a bit to 1 enables the display of the corresponding digit. Setting a bit to 0 disables the display of the corresponding digit.
+    -   **[23:20]** _(R/W-0)_ - DOTS_ENABLE: Enables the display of the dots. The value of this field is a 4-bit mask. Each bit corresponds to a dot on the 7-segment display. Setting a bit to 1 enables the display of the corresponding dot. Setting a bit to 0 disables the display of the corresponding dot.
+    -   **[24]** _(R/W-0)_ - NUMS_FORMAT: Sets the format of the numbers. Setting this bit to 0 sets the format to BCD. It means that every 4bits is a digit. Setting this bit to 1 sets the format to decimal. It means that the value in the NUMS field is the decimal number to display.
+    -   **[31:25]** _(U-0)_ - Not Implemented (Read as 0)
+
+### Configuration
+
+To configure the 7-segment display peripheral, first write the desired value to the 7SEG_REG register. Specify the format of the numbers in the nums_format field. See the [7SEG_REG](#7-segment-display-register-7seg_reg) register for more information. Then, enable the display of the desired digits and dots by setting the corresponding bits in the nums_enable and dots_enable fields.
+
+### Example Code
+
+```
+# Example: Display the number 15 on the 7-segment display
+
+# Set the value of the NUMS field to 15
+addi t0, x0, 15  # Save 15 on t0
+addi t1, x0, 0b1111  # Enable all 7segs
+slli t1, t1, 16  # Put enables on right index
+addi t2, x0, 0b0000  # Disable dots
+slli t2, t2, 20  # Put enables on right index
+addi t3, x0, 1  # nums_format = 1 (Number is in binary)
+slli t3, t3, 24  # Put nums_format on right index
+# sum all
+add t0, t0, t1
+add t0, t0, t2
+add t0, t0, t3
+# write on peripheral
+sw t0, 0x718(x0)
+```
